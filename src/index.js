@@ -8,8 +8,8 @@ async function main() {
   } catch (error) {
     console.error("Unable to connect to the database:", error);
   }
-  app.listen(3000);
-  console.log("Server on port 3000");
+  app.listen(3100);
+  console.log("Server on port 3100");
 }
 
 main();

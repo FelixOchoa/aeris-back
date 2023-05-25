@@ -73,3 +73,24 @@ export const ResponseCreateTeacher = (res, teacherCreate) => {
     code: 201,
   });
 };
+
+export const ResponseCreateMatter = (res, matterCreate) => {
+  res.status(201).json({
+    message: "Matter created successfully",
+    data: [
+      {
+        id: matterCreate.id,
+        created_at: matterCreate.createdAt,
+      },
+    ],
+    code: 201,
+  });
+};
+
+export const ResponseAssignMatter = (res, assign) => {
+  res.status(200).json({
+    message: "Matter assigned successfully",
+    data: assign,
+    code: 200,
+  });
+};
