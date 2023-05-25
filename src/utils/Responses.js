@@ -34,3 +34,42 @@ export const ResponseGetUsers = (res, users) => {
     code: 200,
   });
 };
+
+export const ResponseCreateAdmin = (res, adminCreate) => {
+  res.status(201).json({
+    message: "Admin created successfully",
+    data: [
+      {
+        id: adminCreate.id,
+        created_at: adminCreate.createdAt,
+      },
+    ],
+    code: 201,
+  });
+};
+
+export const ResponseCreateSecretary = (res, secretaryCreate) => {
+  res.status(201).json({
+    message: "Secretary created successfully",
+    data: [
+      {
+        id: secretaryCreate.id,
+        created_at: secretaryCreate.createdAt,
+      },
+    ],
+    code: 201,
+  });
+};
+
+export const ResponseCreateTeacher = (res, teacherCreate) => {
+  res.status(201).json({
+    message: "Teacher created successfully",
+    data: [
+      {
+        id: teacherCreate.id,
+        created_at: teacherCreate.createdAt,
+      },
+    ],
+    code: 201,
+  });
+};

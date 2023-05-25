@@ -25,7 +25,7 @@ export const Users = sequelize.define("users", {
     allowNull: false,
   },
   born_date: {
-    type: DataTypes.DATE,
+    type: DataTypes.DATEONLY,
     allowNull: false,
   },
   phone: {
