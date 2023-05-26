@@ -13,6 +13,8 @@ import {
   ResponseCreateAdmin,
   ResponseCreateSecretary,
   ResponseCreateTeacher,
+  ResponseLoginUser,
+  ResponseGeneratePassword,
 } from "../utils/Responses.js";
 
 export const getUsers = async (req, res) => {
@@ -115,4 +117,34 @@ const CreateTeacher = async (res, User, teacher) => {
   }
 };
 
-export const loginUser = async (req, res) => {};
+export const loginUser = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    const user = await UserService.loginUser(email, password);
+
+    if (user.error) {
+      return ResponseBad(res, user.error);
+    }
+
+    return ResponseLoginUser(res, user);
+  } catch (error) {
+    return ResponseError(res, error.message);
+  }
+};
+
+export const generatePassword = async (req, res) => {
+  try {
+    const { email, newPassword } = req.body;
+
+    const hash = await UserService.generatePassword(email, newPassword);
+
+    if (hash.error) {
+      return ResponseBad(res, hash.error);
+    }
+
+    return ResponseGeneratePassword(res, hash);
+  } catch (error) {
+    return ResponseError(res, error.message);
+  }
+};

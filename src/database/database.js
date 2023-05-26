@@ -1,7 +1,14 @@
 import { Sequelize } from "sequelize";
+import dotenv from "dotenv";
+dotenv.config();
 
-export const sequelize = new Sequelize("aeris", "root", "2882", {
-  host: "localhost",
-  dialect: "mysql",
-  port: "33061",
-});
+export const sequelize = new Sequelize(
+  process.env.DB_NAME,
+  process.env.DB_USER,
+  process.env.DB_PASSWORD,
+  {
+    host: process.env.DB_HOSTNAME,
+    dialect: "mysql",
+    port: process.env.DB_PORT,
+  }
+);

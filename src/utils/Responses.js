@@ -94,3 +94,19 @@ export const ResponseAssignMatter = (res, assign) => {
     code: 200,
   });
 };
+
+export const ResponseLoginUser = (res, user) => {
+  res.status(200).json({
+    message: "User logged successfully",
+    data: user,
+    code: 200,
+  });
+};
+
+export const ResponseGeneratePassword = (res, hash) => {
+  res.status(200).json({
+    message: "Password updated successfully",
+    data: hash,
+    code: 200,
+  });
+};

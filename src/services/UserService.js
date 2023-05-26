@@ -3,12 +3,17 @@ import { Students } from "../models/Students.js";
 import { Admins } from "../models/Admins.js";
 import { Secretaries } from "../models/Secretaries.js";
 import { Teachers } from "../models/Teachers.js";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 const createUser = async (user) => {
   try {
+    const salt = await bcrypt.genSalt(10);
+    const newPassword = await bcrypt.hash(user.password, salt);
+
     const newUser = await Users.create({
       email: user.email,
-      password: user.password,
+      password: newPassword,
       names: user.names,
       lastnames: user.lastnames,
       born_date: user.born_date,
@@ -72,11 +77,79 @@ const createTeacher = async (teacher) => {
   return newTeacher;
 };
 
+const loginUser = async (email, password) => {
+  const user = await Users.findOne({
+    where: {
+      email: email,
+    },
+  });
+
+  if (!user) {
+    return {
+      error: "User not found",
+    };
+  }
+
+  const validPassword = await bcrypt.compare(password, user.password);
+
+  if (!validPassword) {
+    return {
+      error: "Invalid password",
+    };
+  }
+
+  const token = jwt.sign({ userId: user.id }, process.env.JWT_KEY, {
+    expiresIn: "1h",
+  });
+
+  return {
+    id_user: user.id,
+    token: token,
+  };
+};
+
+export const generatePassword = async (email, newPassword) => {
+  const user = await Users.findOne({
+    where: {
+      email: email,
+    },
+  });
+
+  if (!user) {
+    return {
+      error: "User not found",
+    };
+  }
+  if (user.password) {
+    return {
+      error: "User already has a password",
+    };
+  }
+
+  const salt = await bcrypt.genSalt(10);
+  const hash = await bcrypt.hash(newPassword, salt);
+
+  const userUpdate = await Users.update(
+    { password: hash },
+    {
+      where: {
+        email: email,
+      },
+    }
+  );
+
+  return {
+    email: userUpdate.email,
+  };
+};
+
 export const UserService = {
   createUser,
   createStudent,
   createAdmin,
   createSecretary,
   createTeacher,
+  loginUser,
+  generatePassword,
   getUsers,
 };

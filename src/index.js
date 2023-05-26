@@ -8,7 +8,7 @@ async function main() {
   } catch (error) {
     console.error("Unable to connect to the database:", error);
   }
-  app.listen(3100);
+  app.listen(process.env.PORT);
   console.log("Server on port 3100");
 }
 
