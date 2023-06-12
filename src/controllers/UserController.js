@@ -14,6 +14,7 @@ import {
   ResponseCreateSecretary,
   ResponseCreateTeacher,
   ResponseLoginUser,
+  ResponseLogoutUser,
   ResponseGeneratePassword,
 } from "../utils/Responses.js";
 
@@ -128,6 +129,22 @@ export const loginUser = async (req, res) => {
     }
 
     return ResponseLoginUser(res, user);
+  } catch (error) {
+    return ResponseError(res, error.message);
+  }
+};
+
+export const logout = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    const user = await UserService.logoutUser(email);
+
+    if (user.error) {
+      return ResponseBad(res, user.error);
+    }
+
+    return ResponseLogoutUser(res, user);
   } catch (error) {
     return ResponseError(res, error.message);
   }

@@ -110,3 +110,11 @@ export const ResponseGeneratePassword = (res, hash) => {
     code: 200,
   });
 };
+
+export const ResponseLogoutUser = (res, user) => {
+  res.status(200).json({
+    message: "User logged out successfully",
+    data: user,
+    code: 200,
+  });
+};

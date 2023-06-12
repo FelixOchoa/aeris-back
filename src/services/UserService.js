@@ -104,8 +104,33 @@ const loginUser = async (email, password) => {
 
   return {
     id_user: user.id,
+    email: user.email,
     token: token,
   };
+};
+
+export const logoutUser = async (email) => {
+  try {
+    const user = await Users.findOne({
+      where: {
+        email: email,
+      },
+    });
+
+    if (!user) {
+      return {
+        error: "User not found",
+      };
+    }
+
+    return {
+      email: user.email,
+    };
+  } catch (error) {
+    return {
+      error: error.message,
+    };
+  }
 };
 
 export const generatePassword = async (email, newPassword) => {
@@ -150,6 +175,7 @@ export const UserService = {
   createSecretary,
   createTeacher,
   loginUser,
+  logoutUser,
   generatePassword,
   getUsers,
 };
