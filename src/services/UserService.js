@@ -38,6 +38,41 @@ const getUsers = async () => {
   return users;
 };
 
+const getStudents = async () => {
+  const students = await Students.findAll();
+  if (!students || students.length === 0) {
+    return {
+      error: "Students not found",
+    };
+  }
+
+  const studentsData = [];
+
+  for (let i = 0; i < students.length; i++) {
+    const student = students[i];
+    const user = await Users.findOne({
+      where: {
+        id: student.id_user,
+      },
+    });
+
+    studentsData.push({
+      id: user.id,
+      email: user.email,
+      names: user.names,
+      lastnames: user.lastnames,
+      born_date: user.born_date,
+      phone: user.phone,
+      identification: user.identification,
+      type_identification: user.type_identification,
+      address: student.address,
+      grade: student.grade,
+    });
+  }
+
+  return studentsData;
+};
+
 const createStudent = async (student) => {
   const newStudent = await Students.create({
     id_user: student.id,
@@ -102,11 +137,58 @@ const loginUser = async (email, password) => {
     expiresIn: "1h",
   });
 
+  const typeUser = await getTypeUser(user.id);
+
   return {
     id_user: user.id,
     email: user.email,
     token: token,
+    type_user: typeUser.type,
   };
+};
+
+const getTypeUser = async (id_user) => {
+  try {
+    let typeUser = await Students.findOne({
+      where: {
+        id_user: id_user,
+      },
+    });
+
+    if (typeUser) {
+      return {
+        type: "student",
+      };
+    }
+
+    typeUser = await Admins.findOne({
+      where: {
+        id_user: id_user,
+      },
+    });
+
+    if (typeUser) {
+      return {
+        type: "admin",
+      };
+    }
+
+    typeUser = await Secretaries.findOne({
+      where: {
+        id_user: id_user,
+      },
+    });
+
+    if (typeUser) {
+      return {
+        type: "secretary",
+      };
+    }
+  } catch (error) {
+    return {
+      error: error.message,
+    };
+  }
 };
 
 export const logoutUser = async (email) => {
@@ -178,4 +260,5 @@ export const UserService = {
   logoutUser,
   generatePassword,
   getUsers,
+  getStudents,
 };

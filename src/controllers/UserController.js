@@ -22,11 +22,25 @@ export const getUsers = async (req, res) => {
   try {
     const users = await UserService.getUsers();
 
-    if (getUsers.error) {
+    if (users.error) {
       return ResponseBad(res, users.error);
     }
 
     return ResponseGetUsers(res, users);
+  } catch (error) {
+    return ResponseError(res, error.message);
+  }
+};
+
+export const getStudents = async (req, res) => {
+  try {
+    const students = await UserService.getStudents();
+
+    if (students.error) {
+      return ResponseBad(res, students.error);
+    }
+
+    return ResponseGetUsers(res, students);
   } catch (error) {
     return ResponseError(res, error.message);
   }
